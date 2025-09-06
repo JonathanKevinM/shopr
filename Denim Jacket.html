@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Details</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f8f8f8; }
+    header { background: #ff6600; padding: 15px; color: white; font-size: 20px; font-weight: bold; }
+    .container { width: 90%; max-width: 1000px; margin: 20px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+    /* Scrollable main image */
+    .scroll-box {
+      width: 100%;
+      max-width: 900px;
+      height: 500px;
+      overflow: auto; /* enables scrollbars */
+      border-radius: 10px;
+      border: 2px solid #ddd;
+      margin-bottom: 15px;
+    }
+    .scroll-box img {
+      width: 1000px;   /* bigger than the box */
+      height: auto;
+      display: block;
+    }
+
+    /* Thumbnails */
+    .thumbnails { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; }
+    .thumbnails img {
+      width: 100px; height: 80px; object-fit: cover;
+      border-radius: 5px; border: 2px solid transparent; cursor: pointer;
+    }
+    .thumbnails img:hover { border: 2px solid #ff6600; }
+
+    h1 { margin: 10px 0; color: #333; }
+    .meta { display: flex; gap: 20px; font-size: 14px; color: #777; margin-bottom: 20px; }
+    .specs { border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; padding: 15px 0; margin: 20px 0; }
+    .specs div { margin: 8px 0; display: flex; justify-content: space-between; }
+    .description { margin: 20px 0; }
+    button { background: #ff6600; color: white; border: none; padding: 15px; border-radius: 5px; font-size: 16px; cursor: pointer; }
+    button:hover { background: #e65c00; }
+
+    /* Popup modal styles */
+    .modal {
+      display: none; position: fixed; z-index: 1000;
+      left: 0; top: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.6);
+      justify-content: center; align-items: center;
+    }
+    .modal-content {
+      background: white; padding: 25px; border-radius: 8px;
+      width: 90%; max-width: 400px; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      position: relative; animation: fadeIn 0.3s ease-in-out;
+    }
+    .modal-content h2 { margin-top: 0; }
+    .modal-content input {
+      width: 100%; padding: 10px; margin: 8px 0;
+      border: 1px solid #ccc; border-radius: 5px;
+    }
+    .close-btn {
+      position: absolute; top: 10px; right: 15px;
+      font-size: 20px; font-weight: bold;
+      color: #555; cursor: pointer;
+    }
+    .close-btn:hover { color: red; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+  <header>K Store</header>
+
+  <div class="container">
+    <!-- Scrollable Gallery -->
+    <div class="scroll-box">
+      <img src="Sneakers pic 1.jpg" id="mainImage" alt="Product">
+    </div>
+
+    <!-- Thumbnails -->
+    <div class="thumbnails">
+       <img src="Sneakers pic.jpg" onclick="changeImage(this)">
+      <img src="Sneakers pic 2.jpg" onclick="changeImage(this)">
+      <img src="Sneakers pic 3.jpg" onclick="changeImage(this)">
+      <img src="Sneakers pic 5.jpg" onclick="changeImage(this)">
+    </div>
+
+    <!-- Title and meta -->
+    <h1 id="productTitle">Onitsuka Tigers</h1>
+    <div class="meta">
+      <span>Nairobi, Kenya</span>
+      <span>1 hour ago</span>
+      <span>964 views</span>
+    </div>
+
+    <!-- Specs -->
+    <div class="specs">
+      <div><strong>Category:</strong> <span>Shoes</span></div>
+      <div><strong>Brand:</strong> <span>Nike</span></div>
+      <div><strong>Color:</strong> <span>White/Black</span></div>
+      <div><strong>Condition:</strong> <span>New</span></div>
+      <div><strong>Price:</strong> <span>Ksh 3499</span></div>
+    </div>
+
+    <!-- Description -->
+    <div class="description">
+      <p>
+        These sneakers are stylish, durable, and perfect for everyday wear.
+        Lightweight with high-quality fabric, ideal for running, casual walks, and fashion lovers in Kenya.
+      </p>
+    </div>
+
+    <!-- Claim button -->
+    <button id="claimBtn">Claim Item</button>
+  </div>
+
+  <!-- Modal form -->
+  <div class="modal" id="claimModal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeModal">&times;</span>
+      <h2>Claim This Item</h2>
+      <form id="orderForm">
+        <input type="text" id="name" placeholder="Full Name" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="tel" id="phone" placeholder="Phone Number" required>
+        <input type="text" id="location" placeholder="Your Location" required>
+        <input type="text" id="itemDetails" readonly value="Sneakers Black Edition - Ksh 4,500">
+        <button type="submit">Send to Seller</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function changeImage(img) {
+      document.getElementById("mainImage").src = img.src;
+    }
+
+    const modal = document.getElementById("claimModal");
+    const claimBtn = document.getElementById("claimBtn");
+    const closeBtn = document.getElementById("closeModal");
+
+    claimBtn.addEventListener("click", () => {
+      modal.style.display = "flex";
+    });
+    closeBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
+    window.addEventListener("click", (e) => {
+      if (e.target === modal) modal.style.display = "none";
+    });
+
+    document.getElementById("orderForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
+      const location = document.getElementById("location").value;
+      const itemDetails = document.getElementById("itemDetails").value;
+
+      const mailtoLink = `mailto:seller@example.com?subject=Order for ${itemDetails}&body=Name: ${name}%0AEmail: ${email}%0APhone: ${phone}%0ALocation: ${location}%0AItem: ${itemDetails}`;
+      window.location.href = mailtoLink;
+    });
+  </script>
+</body>
+</html>
